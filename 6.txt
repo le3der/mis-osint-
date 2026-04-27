@@ -1,0 +1,163 @@
+<!-- ── ATTACK CHAIN ─────────────────────────────── -->
+<section id="attack-chain" class="sec fade-up">
+  <div class="sec-label red">04 — سيناريو الهجوم</div>
+  <h2 class="sec-title">COMPLETE ATTACK CHAIN</h2>
+
+  <p style="font-size:13px;color:var(--text2);line-height:1.75;margin-bottom:24px;max-width:700px;">
+    الخطوات التالية توضح كيف تتسلسل الثغرات معًا لتُشكّل هجومًا كاملًا من الصفر إلى الاختراق التام،
+    مع الإشارة إلى أي ثغرة يتم استغلالها في كل خطوة.
+  </p>
+
+  <div class="chain">
+    <div class="chain-step">
+      <div class="chain-n scout">01</div>
+      <div class="chain-content">
+        <h4 style="color:var(--blue3)">Reconnaissance — جمع أسماء المستخدمين</h4>
+        <p>المهاجم يبحث في قنوات Telegram العامة وينجح في تجميع قائمة بأسماء مستخدمي MIS لكلية أو أكثر. يحدد الحسابات ذات الصلاحيات العالية عبر قراءة نمط التسمية.</p>
+        <span class="chain-tag">→ VULN-001 exploited · المصدر: منصات عامة مفتوحة</span>
+      </div>
+    </div>
+    <div class="chain-step">
+      <div class="chain-n scout">02</div>
+      <div class="chain-content">
+        <h4 style="color:var(--blue3)">Target Selection — اختيار الهدف</h4>
+        <p>يحدد حساباً عالي القيمة: رئيس قسم أو مسؤول شؤون طلاب لديه صلاحية تعديل الدرجات أو الوصول للبيانات المالية.</p>
+        <span class="chain-tag">→ Pattern: hod_[college]_[id] | stdaff_[college]_[id]</span>
+      </div>
+    </div>
+    <div class="chain-step">
+      <div class="chain-n prep">03</div>
+      <div class="chain-content">
+        <h4 style="color:var(--amber2)">OSINT Collection — جمع بيانات سؤال الأمان</h4>
+        <p>يبحث في دليل موظفي الجامعة الرسمي أو صفحات LinkedIn و Facebook للحصول على الاسم الكامل وتاريخ الميلاد — كلاهما متاح للعموم.</p>
+        <span class="chain-tag">→ Sources: bsu.edu.eg/staff · LinkedIn · Facebook · Researchgate</span>
+      </div>
+    </div>
+    <div class="chain-step">
+      <div class="chain-n xploit">04</div>
+      <div class="chain-content">
+        <h4 style="color:var(--red3)">Password Reset Attack — تنفيذ الهجوم</h4>
+        <p>يفتح صفحة "نسيت كلمة المرور" في mis.bsu.edu.eg، يدخل اسم المستخدم المستهدف، يُجيب على سؤال الأمان باستخدام بيانات OSINT. لا قيود على المحاولات (VULN-003).</p>
+        <span class="chain-tag">→ VULN-002 + VULN-003 exploited simultaneously</span>
+      </div>
+    </div>
+    <div class="chain-step">
+      <div class="chain-n own">05</div>
+      <div class="chain-content">
+        <h4 style="color:#fca5a5">Account Takeover — الاستيلاء على الحساب</h4>
+        <p>النظام يقبل كلمة المرور الجديدة فوراً. لا تحقق إضافي، لا OTP، لا MFA (VULN-004). المالك الأصلي لا يتلقى أي إشعار بما حدث.</p>
+        <span class="chain-tag">→ VULN-004 enables complete access · VULN-005 allows trivial new password</span>
+      </div>
+    </div>
+    <div class="chain-step">
+      <div class="chain-n own">06</div>
+      <div class="chain-content">
+        <h4 style="color:#fca5a5">Exploitation & Persistence — الاستغلال المستمر</h4>
+        <p>تسجيل دخول بالهوية المخترقة. الأثر يعتمد على الدور: تعديل الدرجات، تصدير بيانات الطلاب، الوصول للسجلات المالية، انتحال هوية العمداء. لا كشف شذوذ — الوصول مستمر إلى ما لا نهاية.</p>
+        <span class="chain-tag">→ Full compromise · No detection · No time limit</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout danger" style="margin-top:20px;">
+    <span class="callout-icon">🔑</span>
+    <p>
+      <strong>الخلاصة الجوهرية:</strong> هذا الهجوم لا يحتاج إلى أي مهارة برمجية.
+      يحتاج فقط: (1) قناة Telegram عامة + (2) دليل موظفي الجامعة + (3) صفحة "نسيت كلمة المرور".
+      <strong>متوسط الوقت الكامل للاختراق: أقل من 15 دقيقة.</strong>
+    </p>
+  </div>
+</section>
+
+<!-- ── PROOF OF CONCEPT ────────────────────────── -->
+<section id="poc" class="sec fade-up">
+  <div class="sec-label red">05 — إثبات الاستغلال</div>
+  <h2 class="sec-title">PROOF OF CONCEPT</h2>
+
+  <div class="callout warn" style="margin-bottom:20px;">
+    <span class="callout-icon">⚖</span>
+    <p><strong>إخلاء مسؤولية قانوني:</strong> الـ PoC التالي يوضح المنطق التقني لأغراض التوثيق الأمني فقط، ضمن ترخيص مسابقة جامعية معتمدة. لم يُنفَّذ على أي بيانات حقيقية، ولم يُخترق أي نظام بشكل ضار.</p>
+  </div>
+
+  <h3 class="sub-title" style="margin-bottom:12px;">الخطوة 1 — الاستطلاع السلبي</h3>
+  <div class="terminal">
+    <div class="term-bar">
+      <div class="term-pulse"></div>
+      <span class="term-title">PHASE 1 — PASSIVE RECONNAISSANCE</span>
+    </div>
+    <div class="term-body">
+      <div><span class="term-comment"># البحث في المصادر المفتوحة عن بيانات اعتماد MIS المسربة</span></div>
+      <br>
+      <div><span class="term-prompt">$</span> <span class="term-cmd">search_query: "mis.bsu.edu.eg" site:t.me</span></div>
+      <div><span class="term-resp">→ وُجدت قنوات Telegram عامة تحتوي على قوائم بأسماء مستخدمي MIS</span></div>
+      <br>
+      <div><span class="term-comment"># تحليل نمط التسمية</span></div>
+      <div><span class="term-prompt">$</span> <span class="term-cmd">analyze_pattern leaked_usernames.txt</span></div>
+      <div><span class="term-hi">Pattern detected:</span> <span class="term-resp">[role]_[collegecode]_[sequence]</span></div>
+      <div><span class="term-hi">Roles found:</span> <span class="term-resp">prof, dean, hod, stdaff, admin</span></div>
+      <div><span class="term-hi">Colleges:</span>   <span class="term-resp">scifac, engfac, medfac, artfac, ...</span></div>
+      <br>
+      <div><span class="term-ok">✓ Target identified: hod_scifac_002</span></div>
+      <div><span class="term-resp">  Role: رئيس قسم | College: كلية العلوم | Privileges: GRADE_MODIFY</span></div>
+    </div>
+  </div>
+
+  <h3 class="sub-title" style="margin-top:24px;margin-bottom:12px;">الخطوة 2 — OSINT لجمع بيانات سؤال الأمان</h3>
+  <div class="terminal">
+    <div class="term-bar">
+      <div class="term-pulse"></div>
+      <span class="term-title">PHASE 2 — OPEN SOURCE INTELLIGENCE</span>
+    </div>
+    <div class="term-body">
+      <div><span class="term-comment"># جمع بيانات الهدف من مصادر عامة (لا يحتاج صلاحيات)</span></div>
+      <br>
+      <div><span class="term-prompt">$</span> <span class="term-cmd">check_source: bsu.edu.eg/staff-directory</span></div>
+      <div><span class="term-ok">✓ Full name found: [الاسم الكامل للهدف]</span></div>
+      <div><span class="term-ok">✓ Department: قسم الفيزياء — كلية العلوم</span></div>
+      <div><span class="term-ok">✓ Office: B-205</span></div>
+      <br>
+      <div><span class="term-prompt">$</span> <span class="term-cmd">check_source: linkedin.com/search "[name]"</span></div>
+      <div><span class="term-ok">✓ Date of birth: [تاريخ الميلاد — متاح في الملف الشخصي]</span></div>
+      <br>
+      <div><span class="term-resp">Time elapsed: ~8 minutes | Tools used: Browser only</span></div>
+    </div>
+  </div>
+
+  <h3 class="sub-title" style="margin-top:24px;margin-bottom:12px;">الخطوة 3 — تنفيذ هجوم Password Reset</h3>
+  <div class="terminal">
+    <div class="term-bar">
+      <div class="term-pulse"></div>
+      <span class="term-title">PHASE 3 — PASSWORD RESET ATTACK (EDUCATIONAL PoC)</span>
+    </div>
+    <div class="term-body">
+      <div><span class="term-comment"># التفاعل مع صفحة Password Reset في MIS</span></div>
+      <br>
+      <div><span class="term-prompt">GET</span>  <span class="term-cmd">https://mis.bsu.edu.eg/password-reset</span></div>
+      <div><span class="term-resp">  ← 200 OK | يعرض نموذج إعادة التعيين</span></div>
+      <br>
+      <div><span class="term-prompt">POST</span> <span class="term-cmd">username=hod_scifac_002</span></div>
+      <div><span class="term-ok">  ← 200 OK | الحساب موجود ✓</span></div>
+      <div><span class="term-resp">  ← يعرض السؤال: "ما اسمك الكامل؟"</span></div>
+      <br>
+      <div><span class="term-prompt">POST</span> <span class="term-cmd">security_answer="[الاسم من دليل الجامعة]"</span></div>
+      <div><span class="term-ok">  ← 200 OK | الإجابة صحيحة ✓</span></div>
+      <div><span class="term-err">  ← لا OTP · لا MFA · لا إشعار للمالك الحقيقي</span></div>
+      <div><span class="term-resp">  ← يعرض: "أدخل كلمة المرور الجديدة"</span></div>
+      <br>
+      <div><span class="term-prompt">POST</span> <span class="term-cmd">new_password="[كلمة مرور اختارها المختبِر]"</span></div>
+      <div><span class="term-ok">  ← 200 OK | ✓ تم تغيير كلمة المرور بنجاح</span></div>
+      <br>
+      <div><span class="term-comment">════════════════════════════════════════</span></div>
+      <div><span class="term-hi">Total time: ~4 minutes for this phase</span></div>
+      <div><span class="term-hi">End-to-end: ~12 minutes from zero</span></div>
+      <div><span class="term-hi">Technical skill required: NONE</span></div>
+      <div><span class="term-ok">Account fully compromised: hod_scifac_002</span></div>
+      <div><span class="term-err">Detection triggered: NONE</span></div>
+    </div>
+  </div>
+
+  <div class="callout safe" style="margin-top:20px;">
+    <span class="callout-icon">✅</span>
+    <p><strong>ما تم فعله فور إثبات الثغرة:</strong> إعادة كلمة المرور فورًا إلى وضعها الأصلي، وإخطار الدكتور المشرف في نفس اليوم قبل كتابة هذا التقرير. لم يُطّلع على أي بيانات طلاب أو سجلات النظام الحقيقية.</p>
+  </div>
+</section>

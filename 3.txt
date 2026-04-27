@@ -1,0 +1,262 @@
+<!-- ══ TOPBAR ══════════════════════════════════ -->
+<div id="topbar">
+  <div class="tb-dot"></div>
+  <span class="tb-title">BSU-SEC-2025-001</span>
+  <div class="tb-sep"></div>
+  <span class="tb-tag red">CRITICAL</span>
+  <span class="tb-tag amber">AUTHENTICATION BYPASS</span>
+  <div class="tb-sep"></div>
+  <span class="tb-title" style="color:var(--text3)">mis.bsu.edu.eg</span>
+  <div class="progress" id="prog"></div>
+</div>
+
+<!-- ══ SIDEBAR ═════════════════════════════════ -->
+<nav id="sidebar">
+  <div class="sb-top">
+    <div class="sb-id">BSU-SEC-2025-001</div>
+    <div class="sb-name">MIS Authentication<br>Vulnerability Advisory</div>
+    <div class="sb-badges">
+      <span class="sb-badge conf">CONFIDENTIAL</span>
+      <span class="sb-badge disc">RESPONSIBLE DISC.</span>
+      <span class="sb-badge active">APRIL 2025</span>
+    </div>
+  </div>
+  <div class="sb-body">
+    <div class="sb-group">
+      <div class="sb-group-title">Overview</div>
+      <div class="nav-a on" data-sec="hero">
+        <span>⬡</span> الملخص التنفيذي
+      </div>
+      <div class="nav-a" data-sec="scope">
+        <span>◈</span> النطاق والمنهجية
+      </div>
+      <div class="nav-a" data-sec="risk-matrix">
+        <span>◎</span> مصفوفة المخاطر
+      </div>
+    </div>
+
+    <div class="sb-group">
+      <div class="sb-group-title">الثغرات المكتشفة</div>
+      <div class="nav-a" data-sec="vulns">
+        <span>▲</span> تسريب بيانات الاعتماد
+        <span class="sev sev-h">HIGH</span>
+      </div>
+      <div class="nav-a" data-sec="vuln2-anchor">
+        <span>▲</span> أسئلة أمان قابلة للتخمين
+        <span class="sev sev-c">CRIT</span>
+      </div>
+      <div class="nav-a" data-sec="vuln3-anchor">
+        <span>▲</span> لا Rate Limiting
+        <span class="sev sev-h">HIGH</span>
+      </div>
+      <div class="nav-a" data-sec="vuln4-anchor">
+        <span>▲</span> غياب MFA
+        <span class="sev sev-h">HIGH</span>
+      </div>
+      <div class="nav-a" data-sec="vuln5-anchor">
+        <span>△</span> سياسة مرور ضعيفة
+        <span class="sev sev-m">MED</span>
+      </div>
+    </div>
+
+    <div class="sb-group">
+      <div class="sb-group-title">سيناريو الهجوم</div>
+      <div class="nav-a" data-sec="attack-chain">
+        <span>◉</span> سلسلة الهجوم الكاملة
+      </div>
+      <div class="nav-a" data-sec="poc">
+        <span>◉</span> Proof of Concept
+      </div>
+      <div class="nav-a" data-sec="impact">
+        <span>◉</span> تأثير الاستغلال
+      </div>
+    </div>
+
+    <div class="sb-group">
+      <div class="sb-group-title">الحلول والتصحيح</div>
+      <div class="nav-a" data-sec="fix-otp">
+        <span>✦</span> OTP بدلاً من الأسئلة
+      </div>
+      <div class="nav-a" data-sec="fix-ratelimit">
+        <span>✦</span> Rate Limiting & Lockout
+      </div>
+      <div class="nav-a" data-sec="fix-mfa">
+        <span>✦</span> تطبيق MFA
+      </div>
+      <div class="nav-a" data-sec="fix-pass">
+        <span>✦</span> سياسة كلمات المرور
+      </div>
+      <div class="nav-a" data-sec="fix-governance">
+        <span>✦</span> الحوكمة والتوعية
+      </div>
+    </div>
+
+    <div class="sb-group">
+      <div class="sb-group-title">خارطة الطريق</div>
+      <div class="nav-a" data-sec="roadmap">
+        <span>◑</span> خارطة طريق التصحيح
+      </div>
+      <div class="nav-a" data-sec="disclosure-timeline">
+        <span>◑</span> جدول الإفصاح
+      </div>
+      <div class="nav-a" data-sec="references">
+        <span>◑</span> المراجع والمعايير
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- ══ MAIN ════════════════════════════════════ -->
+<main id="main">
+
+<!-- ── HERO ──────────────────────────────────── -->
+<section id="hero">
+  <div class="hero-grid"></div>
+  <div class="advisory-id">BSU-SEC-2025-001 &nbsp;·&nbsp; RESPONSIBLE DISCLOSURE &nbsp;·&nbsp; CONFIDENTIAL</div>
+  <h1 class="hero-title">
+    CRITICAL <span class="red">AUTHENTICATION</span><br>
+    <span class="blue">BYPASS</span> & CREDENTIAL EXPOSURE
+  </h1>
+  <p class="hero-sub">
+    تقرير الكشف المسؤول عن ثغرات أمنية حرجة في نظام معلومات الإدارة بجامعة بني سويف —
+    تم اكتشافها ضمن مسابقة أمنية رسمية معتمدة من الجامعة، وتم الإفصاح الفوري للمشرف الأكاديمي
+    دون استغلال ضار أو الوصول إلى بيانات حقيقية.
+  </p>
+
+  <div class="meta-grid">
+    <div class="meta-cell">
+      <div class="lbl">TARGET</div>
+      <div class="val cyan" style="font-size:11px">mis.bsu.edu.eg</div>
+    </div>
+    <div class="meta-cell">
+      <div class="lbl">DATE</div>
+      <div class="val">April 2025</div>
+    </div>
+    <div class="meta-cell">
+      <div class="lbl">CLASSIFICATION</div>
+      <div class="val red">CONFIDENTIAL</div>
+    </div>
+    <div class="meta-cell">
+      <div class="lbl">DISCLOSURE</div>
+      <div class="val green">Responsible</div>
+    </div>
+    <div class="meta-cell">
+      <div class="lbl">MAX CVSS v3.1</div>
+      <div class="val purple">9.1 / 10.0</div>
+    </div>
+    <div class="meta-cell">
+      <div class="lbl">AUTHORIZATION</div>
+      <div class="val green">University Competition</div>
+    </div>
+  </div>
+
+  <div class="score-row">
+    <div class="score-box c"><div class="n">2</div><div class="l">CRITICAL</div></div>
+    <div class="score-box h"><div class="n">3</div><div class="l">HIGH</div></div>
+    <div class="score-box m"><div class="n">1</div><div class="l">MEDIUM</div></div>
+    <div class="score-box p"><div class="n">9.1</div><div class="l">MAX CVSS</div></div>
+  </div>
+
+  <div class="callout danger" style="margin-top:28px;max-width:780px;">
+    <span class="callout-icon">⚠</span>
+    <p>
+      <strong>إشعار قانوني وأخلاقي:</strong> هذا التقرير وُجد لأغراض أكاديمية وتعليمية صرفة ضمن مسابقة أمنية رسمية معتمدة.
+      لم يُستغل أي حساب بشكل ضار، ولم تُعدَّل أي بيانات، ولم يُخترق أي نظام خارج النطاق المصرح به.
+      تم الإبلاغ الفوري للمشرف المختص قبل إعداد هذه الوثيقة.
+    </p>
+  </div>
+</section>
+
+<!-- ── SCOPE ──────────────────────────────────── -->
+<section id="scope" class="sec fade-up">
+  <div class="sec-label blue">01 — النطاق والمنهجية</div>
+  <h2 class="sec-title">SCOPE & METHODOLOGY</h2>
+
+  <div class="g2" style="margin-bottom:24px;">
+    <div>
+      <h3 class="sub-title">نطاق التقييم</h3>
+      <table class="compare">
+        <tbody>
+          <tr><td>النظام المستهدف</td><td><span style="font-family:var(--mono);color:var(--cyan)">mis.bsu.edu.eg</span></td></tr>
+          <tr><td>نوع التقييم</td><td>Passive Recon + Auth Logic Testing</td></tr>
+          <tr><td>الترخيص</td><td><span style="color:var(--green2)">مسابقة أمنية جامعية رسمية</span></td></tr>
+          <tr><td>معيار الخطورة</td><td>CVSS v3.1 (NVD)</td></tr>
+          <tr><td>الإطار المرجعي</td><td>OWASP Top 10 · NIST SP 800-63B</td></tr>
+          <tr><td>مدة التقييم</td><td>يوم واحد (اكتشاف + توثيق)</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div>
+      <h3 class="sub-title">أدوار المستخدمين في نظام MIS</h3>
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <div class="card" style="padding:10px 14px;display:flex;align-items:center;gap:10px;">
+          <span style="font-size:16px">👨‍🏫</span>
+          <div>
+            <div style="font-size:12.5px;font-weight:700;">أستاذ (Professor)</div>
+            <div style="font-size:11.5px;color:var(--text2)">رفع الدرجات · إدارة المقررات</div>
+          </div>
+        </div>
+        <div class="card" style="padding:10px 14px;display:flex;align-items:center;gap:10px;">
+          <span style="font-size:16px">👩‍💼</span>
+          <div>
+            <div style="font-size:12.5px;font-weight:700;">شؤون الطلاب (Student Affairs)</div>
+            <div style="font-size:11.5px;color:var(--text2)">التسجيل · الحضور · البيانات الشخصية</div>
+          </div>
+        </div>
+        <div class="card" style="padding:10px 14px;display:flex;align-items:center;gap:10px;">
+          <span style="font-size:16px">🏛</span>
+          <div>
+            <div style="font-size:12.5px;font-weight:700;">رئيس قسم (HOD)</div>
+            <div style="font-size:11.5px;color:var(--text2)">اعتماد الدرجات · إدارة هيئة التدريس</div>
+          </div>
+        </div>
+        <div class="card" style="padding:10px 14px;display:flex;align-items:center;gap:10px;">
+          <span style="font-size:16px">👔</span>
+          <div>
+            <div style="font-size:12.5px;font-weight:700;">عميد / إدارة (Dean / Admin)</div>
+            <div style="font-size:11.5px;color:var(--text2)">وصول شامل · بيانات مالية · تكوين النظام</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h3 class="sub-title">منهجية التقييم المتدرجة</h3>
+  <div style="display:flex;flex-direction:column;gap:10px;">
+    <div class="fix-step">
+      <div class="fix-n b">1</div>
+      <div class="fix-content">
+        <h4>الاستطلاع السلبي (Passive Reconnaissance)</h4>
+        <p>البحث في مصادر مفتوحة — قنوات Telegram العامة، المنتديات، ومحركات البحث — عن بيانات اعتماد MIS المسربة دون أي تفاعل مباشر مع الأنظمة.</p>
+      </div>
+    </div>
+    <div class="fix-step">
+      <div class="fix-n b">2</div>
+      <div class="fix-content">
+        <h4>تحليل بيانات الاعتماد</h4>
+        <p>تصنيف ما تم جمعه، تحديد الحسابات النشطة، واستخلاص نمط التسمية المستخدم.</p>
+      </div>
+    </div>
+    <div class="fix-step">
+      <div class="fix-n b">3</div>
+      <div class="fix-content">
+        <h4>تحليل آلية إعادة تعيين كلمة المرور</h4>
+        <p>فحص منطق Reset Password وتحديد الثغرة المنطقية في نظام أسئلة الأمان (Knowledge-Based Authentication).</p>
+      </div>
+    </div>
+    <div class="fix-step">
+      <div class="fix-n r">4</div>
+      <div class="fix-content">
+        <h4>إثبات المفهوم المحكوم (Controlled PoC)</h4>
+        <p>تطبيق عملي على حساب واحد بإذن وعلم المشرف لإثبات قابلية الاستغلال الفعلي.</p>
+      </div>
+    </div>
+    <div class="fix-step">
+      <div class="fix-n g">5</div>
+      <div class="fix-content">
+        <h4>الإفصاح المسؤول الفوري (Responsible Disclosure)</h4>
+        <p>إخطار المشرف الأكاديمي في نفس يوم الاكتشاف، ثم إعداد هذا التقرير الشامل للإدارة.</p>
+      </div>
+    </div>
+  </div>
+</section>

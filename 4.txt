@@ -1,0 +1,172 @@
+<!-- ── RISK MATRIX ─────────────────────────────── -->
+<section id="risk-matrix" class="sec fade-up">
+  <div class="sec-label red">02 — مصفوفة المخاطر</div>
+  <h2 class="sec-title">RISK SUMMARY MATRIX</h2>
+
+  <table class="compare" style="margin-bottom:16px;">
+    <thead>
+      <tr>
+        <th>المعرّف</th>
+        <th>الثغرة</th>
+        <th>الخطورة</th>
+        <th>CVSS</th>
+        <th>CWE</th>
+        <th>الأثر المحتمل</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span style="font-family:var(--mono);font-size:11px;color:var(--cyan)">VULN-001</span></td>
+        <td>تسريب بيانات الاعتماد على منصات عامة</td>
+        <td><span class="badge h">HIGH</span></td>
+        <td><span style="font-family:var(--mono);color:var(--amber2)">7.5</span></td>
+        <td><span class="badge cwe">CWE-200</span></td>
+        <td>الوصول غير المصرح به</td>
+      </tr>
+      <tr>
+        <td><span style="font-family:var(--mono);font-size:11px;color:var(--cyan)">VULN-002</span></td>
+        <td>أسئلة أمان قابلة للتخمين → استيلاء كامل</td>
+        <td><span class="badge c">CRITICAL</span></td>
+        <td><span style="font-family:var(--mono);color:var(--red3)">9.1</span></td>
+        <td><span class="badge cwe">CWE-640</span></td>
+        <td>اختراق كامل للحسابات + تعديل الدرجات</td>
+      </tr>
+      <tr>
+        <td><span style="font-family:var(--mono);font-size:11px;color:var(--cyan)">VULN-003</span></td>
+        <td>غياب Rate Limiting على Password Reset</td>
+        <td><span class="badge h">HIGH</span></td>
+        <td><span style="font-family:var(--mono);color:var(--amber2)">8.0</span></td>
+        <td><span class="badge cwe">CWE-307</span></td>
+        <td>هجمات Brute-force غير محدودة</td>
+      </tr>
+      <tr>
+        <td><span style="font-family:var(--mono);font-size:11px;color:var(--cyan)">VULN-004</span></td>
+        <td>غياب المصادقة الثنائية (MFA)</td>
+        <td><span class="badge h">HIGH</span></td>
+        <td><span style="font-family:var(--mono);color:var(--amber2)">7.8</span></td>
+        <td><span class="badge cwe">CWE-308</span></td>
+        <td>استمرار الوصول غير المصرح بعد أي اختراق</td>
+      </tr>
+      <tr>
+        <td><span style="font-family:var(--mono);font-size:11px;color:var(--cyan)">VULN-005</span></td>
+        <td>سياسة كلمات مرور ضعيفة</td>
+        <td><span class="badge m">MEDIUM</span></td>
+        <td><span style="font-family:var(--mono);color:var(--green2)">6.5</span></td>
+        <td><span class="badge cwe">CWE-521</span></td>
+        <td>كلمات مرور سهلة التخمين بعد الاستيلاء</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout warn">
+    <span class="callout-icon">⚡</span>
+    <p>
+      <strong>تحذير — تراكم الثغرات:</strong> خطورة هذه الثغرات مضاعفة لأنها مترابطة.
+      VULN-001 يُغذّي VULN-002، وغياب VULN-003 يجعل الاستغلال آليًا،
+      وغياب VULN-004 يجعل الاختراق مستمرًا. الهجوم الكامل لا يحتاج إلى أي مهارة تقنية.
+    </p>
+  </div>
+</section>
+
+<!-- ── VULNS ───────────────────────────────────── -->
+<section id="vulns" class="sec fade-up">
+  <div class="sec-label red">03 — تفاصيل الثغرات</div>
+  <h2 class="sec-title">VULNERABILITY DETAILS</h2>
+
+  <!-- V1 -->
+  <div id="vuln1-anchor" class="vuln-entry">
+    <div class="vuln-header" onclick="toggleVuln(this)">
+      <span class="vuln-num">VULN-001</span>
+      <span class="vuln-name">تسريب بيانات الاعتماد على منصات عامة</span>
+      <span class="badge h">HIGH</span>
+      <span class="badge cvss">CVSS 7.5</span>
+      <span class="badge cwe">CWE-200</span>
+      <span class="badge owasp">A07:2021</span>
+      <span class="vuln-toggle">▼</span>
+    </div>
+    <div class="vuln-body open">
+      <div class="g2" style="margin-bottom:16px;">
+        <div>
+          <h3 class="sub-title">الوصف التقني</h3>
+          <p style="font-size:13px;color:var(--text2);line-height:1.75;margin-bottom:12px;">
+            تم رصد عدد كبير من أسماء مستخدمي نظام MIS على قنوات Telegram عامة ومنتديات إنترنت مفتوحة.
+            هذه البيانات تشمل حسابات أساتذة وإداريين وعمداء من كليات متعددة.
+            المعلومات تتضمن الأسماء ونمط التسمية الكامل الذي يسمح بتوليد أسماء مستخدمين إضافية لم تُسرَّب بعد.
+          </p>
+          <ul class="plain r">
+            <li>قوائم كاملة بأسماء مستخدمي MIS على Telegram</li>
+            <li>نمط التسمية: <code style="font-family:var(--mono);color:var(--cyan);font-size:11px">[الدور]_[كود_الكلية]_[رقم]</code></li>
+            <li>يُمكّن مباشرةً من تنفيذ VULN-002</li>
+            <li>النمط القابل للتنبؤ يسمح بتوليد حسابات غير مسربة</li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="sub-title">الأثر التشغيلي</h3>
+          <ul class="plain a">
+            <li>اسم المستخدم = نصف بيانات الدخول الكاملة</li>
+            <li>يكشف الهيكل التنظيمي الكامل للجامعة</li>
+            <li>يُبسّط استهداف الحسابات عالية الصلاحيات</li>
+            <li>دليل على غياب الثقافة الأمنية لدى الموظفين</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="code-wrap">
+        <div class="code-bar">
+          <div class="code-dots"><span class="d1"></span><span class="d2"></span><span class="d3"></span></div>
+          <span class="code-file">leaked_credentials_pattern.txt — نمط ما تم اكتشافه</span>
+          <button class="code-copy" onclick="copyCode(this)">Copy</button>
+        </div>
+        <div class="code-body"><pre><span class="t-c"># ══ نمط أسماء المستخدمين المسرّبة في القنوات العامة ══
+# الصيغة: [الدور]_[كود الكلية]_[رقم تسلسلي]
+# الأرقام المعروضة هي نمط توضيحي، وليست أسماء مستخدمين حقيقية نشطة</span>
+
+<span class="t-k">prof</span>_<span class="t-n">scifac</span>_<span class="t-s">001</span>    <span class="t-c"># أستاذ · كلية العلوم</span>
+<span class="t-k">prof</span>_<span class="t-n">engfac</span>_<span class="t-s">003</span>    <span class="t-c"># أستاذ · كلية الهندسة</span>
+<span class="t-k">dean</span>_<span class="t-n">medfac</span>_<span class="t-s">01</span>     <span class="t-c"># عميد · كلية الطب</span>
+<span class="t-k">stdaff</span>_<span class="t-n">scifac</span>_<span class="t-s">02</span>   <span class="t-c"># شؤون طلاب · كلية العلوم</span>
+<span class="t-k">hod</span>_<span class="t-n">engfac</span>_<span class="t-s">004</span>     <span class="t-c"># رئيس قسم · كلية الهندسة</span>
+<span class="t-k">admin</span>_<span class="t-n">univ</span>_<span class="t-s">001</span>     <span class="t-c"># مدير النظام · مستوى الجامعة</span>
+
+<span class="t-c"># ══ الخطورة الجوهرية ══
+# معرفة نمط واحد → توليد جميع أسماء مستخدمي أي كلية
+# مثال: hod_[X]fac_[001..999] تغطي جميع رؤساء الأقسام</span></pre></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- V2 -->
+  <div id="vuln2-anchor" class="vuln-entry">
+    <div class="vuln-header" onclick="toggleVuln(this)">
+      <span class="vuln-num">VULN-002</span>
+      <span class="vuln-name">آلية إعادة تعيين كلمة المرور — أسئلة أمان قابلة للتخمين</span>
+      <span class="badge c">CRITICAL</span>
+      <span class="badge cvss">CVSS 9.1</span>
+      <span class="badge cwe">CWE-640</span>
+      <span class="vuln-toggle">▼</span>
+    </div>
+    <div class="vuln-body open">
+      <p style="font-size:13px;color:var(--text2);line-height:1.75;margin-bottom:16px;">
+        آلية Password Reset تعتمد على <strong style="color:var(--text)">Knowledge-Based Authentication (KBA)</strong> —
+        وهي أسئلة شخصية مثل الاسم الكامل أو تاريخ الميلاد.
+        المشكلة الجوهرية أن هذه المعلومات متاحة علنًا في دليل موظفي الجامعة أو وسائل التواصل الاجتماعي،
+        مما يجعل هذا النظام معادلًا أمنيًا لعدم وجود أي حماية على الإطلاق.
+      </p>
+
+      <div class="g2" style="margin-bottom:16px;">
+        <div class="card danger">
+          <h3 class="sub-title" style="color:#fca5a5">أسئلة مكتشفة في النظام</h3>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div style="background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.2);border-radius:5px;padding:8px 12px;font-size:12.5px;">
+              <span style="color:#fca5a5;font-family:var(--mono);font-size:10px">Q1</span> — "ما اسمك الكامل؟"
+              <span style="color:var(--text3);font-size:11px;display:block;margin-top:2px">→ متاح في دليل موظفي الجامعة</span>
+            </div>
+            <div style="background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.2);border-radius:5px;padding:8px 12px;font-size:12.5px;">
+              <span style="color:#fca5a5;font-family:var(--mono);font-size:10px">Q2</span> — "ما تاريخ ميلادك؟"
+              <span style="color:var(--text3);font-size:11px;display:block;margin-top:2px">→ متاح على Facebook / LinkedIn</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

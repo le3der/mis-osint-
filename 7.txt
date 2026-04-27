@@ -1,0 +1,221 @@
+<!-- ── IMPACT ───────────────────────────────────── -->
+<section id="impact" class="sec fade-up">
+  <div class="sec-label red">06 — تأثير الاستغلال</div>
+  <h2 class="sec-title">EXPLOITATION IMPACT</h2>
+
+  <div class="impact-grid">
+    <div class="impact-card">
+      <h4>📊 تزوير الدرجات الأكاديمية</h4>
+      <p>تعديل درجات الطلاب عبر حسابات الأساتذة أو رؤساء الأقسام. الأثر على المستوى الجامعي بالكامل وصعوبة بالغة في الاكتشاف أو التراجع لاحقًا.</p>
+    </div>
+    <div class="impact-card">
+      <h4>💰 الوصول للسجلات المالية</h4>
+      <p>الاطلاع على بيانات المصاريف الدراسية لآلاف الطلاب. محاولات محتملة لتعديل حالات الدفع. تعريض بيانات مالية حساسة لمخاطر قانونية.</p>
+    </div>
+    <div class="impact-card">
+      <h4>📁 سرقة البيانات الشخصية (PII)</h4>
+      <p>تصدير قواعد بيانات كاملة تحتوي أسماء الطلاب، أرقامهم القومية، عناوينهم، معلوماتهم الأكاديمية. انتهاك صريح لقوانين حماية البيانات المصرية.</p>
+    </div>
+    <div class="impact-card">
+      <h4>🎭 انتحال الهوية المؤسسية</h4>
+      <p>تسجيل دخول بهوية عميد أو مدير للجامعة. إصدار قرارات أكاديمية مزورة، التلاعب بالجداول الدراسية، التواصل الرسمي بهوية مسؤولين.</p>
+    </div>
+    <div class="impact-card">
+      <h4>📈 تصعيد الصلاحيات</h4>
+      <p>استخدام حساب مدير النظام للوصول لإعدادات البنية التحتية، وربما تثبيت باب خلفي دائم. الانتقال من اختراق مؤقت إلى سيطرة شاملة.</p>
+    </div>
+    <div class="impact-card">
+      <h4>🏛 الضرر المؤسسي والقانوني</h4>
+      <p>الإضرار بسمعة الجامعة أكاديميًا. التعرض للمسؤولية القانونية بسبب اختراق بيانات الطلاب. فقدان ثقة الطلاب وأولياء الأمور وهيئات الاعتماد الأكاديمي.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FIXES ════════════════════════════════════ -->
+
+<!-- FIX 1 -->
+<section id="fix-otp" class="sec fade-up">
+  <div class="sec-label green">07 — الحل الأول</div>
+  <h2 class="sec-title">FIX #1: REPLACE KBA WITH OTP</h2>
+
+  <div class="callout info" style="margin-bottom:20px;">
+    <span class="callout-icon">💡</span>
+    <p><strong>المبدأ الجوهري:</strong> أسئلة الأمان تعتمد على "معلومات سرية" — لكنها ليست سرية. OTP يعتمد على وصول مادي لجهاز أو بريد — وهذا سر حقيقي غير قابل للحصول عليه عن بعد.</p>
+  </div>
+
+  <div class="g2" style="margin-bottom:16px;">
+    <div>
+      <h3 class="sub-title">تدفق Reset الآمن المقترح</h3>
+      <div class="fix-step">
+        <div class="fix-n g">1</div>
+        <div class="fix-content"><h4>المستخدم يدخل اسمه أو بريده المسجل</h4><p>النظام يتحقق من وجود الحساب فقط دون كشف معلومات</p></div>
+      </div>
+      <div class="fix-step">
+        <div class="fix-n g">2</div>
+        <div class="fix-content"><h4>توليد OTP عشوائي تشفيريًا</h4><p>6–8 أرقام، صالح 10 دقائق فقط، مرتبط بالجلسة</p></div>
+      </div>
+      <div class="fix-step">
+        <div class="fix-n g">3</div>
+        <div class="fix-content"><h4>OTP يُرسَل للبريد/الهاتف المسجل</h4><p>لا يُعرض على الشاشة أبداً، فقط لقناة آمنة</p></div>
+      </div>
+      <div class="fix-step">
+        <div class="fix-n g">4</div>
+        <div class="fix-content"><h4>التحقق من OTP ثم السماح بتغيير كلمة المرور</h4><p>إبطال فوري بعد الاستخدام، إشعار للمالك الحقيقي</p></div>
+      </div>
+    </div>
+    <div>
+      <div class="code-wrap">
+        <div class="code-bar">
+          <div class="code-dots"><span class="d1"></span><span class="d2"></span><span class="d3"></span></div>
+          <span class="code-file">secure_otp_reset.pseudocode</span>
+          <button class="code-copy" onclick="copyCode(this)">Copy</button>
+        </div>
+        <div class="code-body"><pre><span class="t-c">// ✅ منطق Reset الآمن</span>
+
+<span class="t-k">function</span> <span class="t-n">initiateReset</span>(username):
+  user = db.findUser(username)
+  <span class="t-k">if</span> !user: <span class="t-k">return</span> genericError()
+  <span class="t-c">// لا تكشف إن كان الحساب موجوداً</span>
+
+  otp = <span class="t-n">crypto.randomBytes</span>(<span class="t-s">4</span>).toString(<span class="t-s">'hex'</span>)
+  ttl = <span class="t-s">10 * 60</span> <span class="t-c">// 10 دقائق</span>
+
+  db.storeOTP(user.id, hash(otp), ttl)
+  sendEmail(user.email, otp) <span class="t-c">// فقط للبريد</span>
+
+<span class="t-k">function</span> <span class="t-n">verifyOTP</span>(username, submittedOTP):
+  stored = db.getOTP(username)
+  <span class="t-k">if</span> !stored || stored.expired:
+    <span class="t-k">return</span> <span class="t-r">INVALID</span>
+  <span class="t-k">if</span> !timingSafeEqual(hash(submittedOTP), stored.hash):
+    logFailedAttempt(username)
+    <span class="t-k">return</span> <span class="t-r">INVALID</span>
+  db.invalidateOTP(username) <span class="t-c">// single use</span>
+  <span class="t-k">return</span> <span class="t-g">VALID</span></pre></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FIX 2 -->
+<section id="fix-ratelimit" class="sec fade-up">
+  <div class="sec-label green">08 — الحل الثاني</div>
+  <h2 class="sec-title">FIX #2: RATE LIMITING & ACCOUNT LOCKOUT</h2>
+
+  <div class="g2">
+    <div>
+      <div class="code-wrap">
+        <div class="code-bar">
+          <div class="code-dots"><span class="d1"></span><span class="d2"></span><span class="d3"></span></div>
+          <span class="code-file">rate_limit_policy.conf</span>
+          <button class="code-copy" onclick="copyCode(this)">Copy</button>
+        </div>
+        <div class="code-body"><pre><span class="t-c"># ══ سياسة Rate Limiting المقترحة ══</span>
+
+<span class="t-k">password_reset_endpoint:</span>
+  per_username:
+    max_requests:     <span class="t-s">5</span>
+    window_minutes:   <span class="t-s">60</span>
+    lockout_duration: <span class="t-s">30 min</span>
+
+  per_ip:
+    max_requests:     <span class="t-s">10</span>
+    window_minutes:   <span class="t-s">60</span>
+
+  progressive_delay:
+    attempt_1: <span class="t-s">0s</span>
+    attempt_2: <span class="t-s">2s</span>
+    attempt_3: <span class="t-s">5s</span>
+    attempt_4: <span class="t-s">15s</span>
+    attempt_5: <span class="t-r">→ LOCKOUT (30 min)</span>
+
+  captcha:
+    type:      <span class="t-s">reCAPTCHA v3</span>
+    threshold: <span class="t-s">0.5</span>
+    action:    <span class="t-s">password_reset</span>
+
+<span class="t-k">on_lockout:</span>
+  - block_reset_for: <span class="t-s">30 min</span>
+  - email_owner: <span class="t-g">true</span>
+  - log_event:   <span class="t-g">true</span>
+  - alert_team:  <span class="t-g">true</span>
+  - require_admin_unlock_after: <span class="t-s">3 lockouts</span></pre></div>
+      </div>
+    </div>
+    <div>
+      <h3 class="sub-title" style="margin-bottom:14px;">الإجراءات التكميلية</h3>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div class="card safe">
+          <h4 style="font-size:12.5px;color:var(--green2);margin-bottom:5px;">✓ CAPTCHA على نموذج Reset</h4>
+          <p style="font-size:12px;">reCAPTCHA v3 (خفي) يمنع البوتات دون إزعاج المستخدم الحقيقي</p>
+        </div>
+        <div class="card safe">
+          <h4 style="font-size:12.5px;color:var(--green2);margin-bottom:5px;">✓ تسجيل شامل للأحداث</h4>
+          <p style="font-size:12px;">كل محاولة: الوقت + IP + User-Agent + اسم المستخدم + النتيجة</p>
+        </div>
+        <div class="card safe">
+          <h4 style="font-size:12.5px;color:var(--green2);margin-bottom:5px;">✓ إشعار المستخدم الحقيقي</h4>
+          <p style="font-size:12px;">بريد إلكتروني فوري عند كل طلب Reset — يمنح المستخدم فرصة للإلغاء</p>
+        </div>
+        <div class="card safe">
+          <h4 style="font-size:12.5px;color:var(--green2);margin-bottom:5px;">✓ تنبيه أمني تلقائي</h4>
+          <p style="font-size:12px;">تنبيه لفريق الأمن عند تجاوز الحد لأي حساب</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FIX 3 -->
+<section id="fix-mfa" class="sec fade-up">
+  <div class="sec-label green">09 — الحل الثالث</div>
+  <h2 class="sec-title">FIX #3: MULTI-FACTOR AUTHENTICATION</h2>
+
+  <div class="g3" style="margin-bottom:20px;">
+    <div class="card safe" style="text-align:center;padding:18px;">
+      <div style="font-size:28px;margin-bottom:8px;">📱</div>
+      <strong style="font-size:13px;color:var(--green2);">TOTP App</strong>
+      <p style="font-size:11.5px;margin-top:6px;">Google / Microsoft Authenticator. <br>إلزامي لـ Admin, Dean, HOD</p>
+      <span class="badge m" style="margin-top:8px;display:inline-block;">الأفضل</span>
+    </div>
+    <div class="card info" style="text-align:center;padding:18px;">
+      <div style="font-size:28px;margin-bottom:8px;">📧</div>
+      <strong style="font-size:13px;color:var(--blue3);">Email OTP</strong>
+      <p style="font-size:11.5px;margin-top:6px;">رمز على البريد المسجل. <br>حد أدنى لـ Prof, StdAff</p>
+      <span class="badge cwe" style="margin-top:8px;display:inline-block;">جيد</span>
+    </div>
+    <div class="card" style="text-align:center;padding:18px;">
+      <div style="font-size:28px;margin-bottom:8px;">💬</div>
+      <strong style="font-size:13px;color:var(--text2);">SMS OTP</strong>
+      <p style="font-size:11.5px;margin-top:6px;">كبديل عند عدم إمكانية الوصول للبريد</p>
+      <span class="badge h" style="margin-top:8px;display:inline-block;">بديل</span>
+    </div>
+  </div>
+
+  <div class="code-wrap">
+    <div class="code-bar">
+      <div class="code-dots"><span class="d1"></span><span class="d2"></span><span class="d3"></span></div>
+      <span class="code-file">mfa_policy.conf — سياسة المصادقة الثنائية</span>
+      <button class="code-copy" onclick="copyCode(this)">Copy</button>
+    </div>
+    <div class="code-body"><pre><span class="t-c"># ══ سياسة MFA حسب مستوى الصلاحيات ══</span>
+
+<span class="t-k">role ADMIN, DEAN, HOD:</span>
+  mfa_required:    <span class="t-g">true</span>
+  allowed_methods: [<span class="t-s">TOTP_APP</span>, <span class="t-s">EMAIL_OTP</span>]
+  preferred:       <span class="t-s">TOTP_APP</span>
+  session_ttl:     <span class="t-s">4h</span>  <span class="t-c"># أقصر للحسابات المميزة</span>
+
+<span class="t-k">role PROFESSOR, STUDENT_AFFAIRS:</span>
+  mfa_required:    <span class="t-g">true</span>
+  allowed_methods: [<span class="t-s">EMAIL_OTP</span>, <span class="t-s">SMS_OTP</span>]
+  preferred:       <span class="t-s">EMAIL_OTP</span>
+  session_ttl:     <span class="t-s">8h</span>
+
+<span class="t-k">enforcement:</span>
+  bypass_allowed:  <span class="t-r">false</span>  <span class="t-c"># لا استثناءات</span>
+  remember_device: <span class="t-g">true</span>   <span class="t-c"># 30 يومًا على الأجهزة الموثوقة</span>
+  new_device_alert:<span class="t-g">true</span>   <span class="t-c"># إشعار عند تسجيل دخول من جهاز جديد</span>
+  if_mfa_fails:    <span class="t-r">DENY_LOGIN</span></pre></div>
+  </div>
+</section>

@@ -1,0 +1,23 @@
+{
+  "entities": {
+    "ScoreEntry": {
+      "title": "Score Entry",
+      "description": "A user's final score on the cyberlab.",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "score": { "type": "number" },
+        "grade": { "type": "string" },
+        "timeTaken": { "type": "number" },
+        "timestamp": { "type": "any" }
+      },
+      "required": ["name", "score", "grade", "timeTaken", "timestamp"]
+    }
+  },
+  "firestore": {
+    "leaderboard/{entryId}": {
+      "schema": "ScoreEntry",
+      "description": "Public leaderboard of scores."
+    }
+  }
+}

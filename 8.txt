@@ -1,0 +1,283 @@
+<!-- FIX 4 -->
+<section id="fix-pass" class="sec fade-up">
+  <div class="sec-label green">10 — الحل الرابع</div>
+  <h2 class="sec-title">FIX #4: STRONG PASSWORD POLICY</h2>
+
+  <div class="code-wrap">
+    <div class="code-bar">
+      <div class="code-dots"><span class="d1"></span><span class="d2"></span><span class="d3"></span></div>
+      <span class="code-file">password_policy.conf — سياسة كلمات المرور</span>
+      <button class="code-copy" onclick="copyCode(this)">Copy</button>
+    </div>
+    <div class="code-body"><pre><span class="t-c"># ══ سياسة كلمات المرور المقترحة (NIST SP 800-63B + OWASP) ══</span>
+
+<span class="t-k">complexity:</span>
+  min_length:         <span class="t-s">12</span>
+  require_uppercase:  <span class="t-g">true</span>
+  require_lowercase:  <span class="t-g">true</span>
+  require_digit:      <span class="t-g">true</span>
+  require_special:    <span class="t-g">true</span>
+  max_length:         <span class="t-s">128</span>  <span class="t-c"># لا حد أقصى منخفض</span>
+
+<span class="t-k">reuse_policy:</span>
+  history_count:  <span class="t-s">10</span>  <span class="t-c"># لا إعادة استخدام آخر 10 كلمات مرور</span>
+
+<span class="t-k">expiry:</span>
+  privileged_roles:   <span class="t-s">90 days</span>   <span class="t-c"># Admin, Dean, HOD</span>
+  standard_roles:     <span class="t-s">180 days</span>  <span class="t-c"># Prof, StdAff</span>
+  notify_before_days: <span class="t-s">14</span>
+
+<span class="t-k">breach_check:</span>
+  provider: <span class="t-s">HaveIBeenPwned API</span>
+  on_match:  <span class="t-r">REJECT</span>  <span class="t-c"># رفض كلمات المرور المخترقة مسبقًا</span>
+
+<span class="t-k">banned_patterns:</span>
+  - username_in_password
+  - sequential_chars: <span class="t-r">123456, abcdef</span>
+  - university_name:  <span class="t-r">bsu, benisueif</span>
+  - dictionary_words: <span class="t-r">true</span></pre></div>
+  </div>
+</section>
+
+<!-- FIX 5 -->
+<section id="fix-governance" class="sec fade-up">
+  <div class="sec-label green">11 — الحل الخامس</div>
+  <h2 class="sec-title">FIX #5: GOVERNANCE & SECURITY AWARENESS</h2>
+
+  <div class="g2">
+    <div>
+      <h3 class="sub-title" style="margin-bottom:12px;">معالجة التسريب الحالي — فورية</h3>
+      <div class="fix-step">
+        <div class="fix-n r">1</div>
+        <div class="fix-content"><h4>إعادة تعيين إلزامية لكل الحسابات المسربة</h4><p>إجبار جميع الحسابات التي ظهرت في القنوات العامة على تغيير كلمة المرور فور تطبيق الحل</p></div>
+      </div>
+      <div class="fix-step">
+        <div class="fix-n r">2</div>
+        <div class="fix-content"><h4>الإبلاغ عن القنوات المسربة</h4><p>الإبلاغ الرسمي لـ Telegram عن القنوات التي نشرت بيانات الاعتماد لإزالتها</p></div>
+      </div>
+      <div class="fix-step">
+        <div class="fix-n b">3</div>
+        <div class="fix-content"><h4>مراجعة نمط أسماء المستخدمين</h4><p>تغيير النمط ليكون غير قابل للتنبؤ وإضافة مكوّن عشوائي للحسابات الجديدة</p></div>
+      </div>
+      <div class="fix-step">
+        <div class="fix-n b">4</div>
+        <div class="fix-content"><h4>مراقبة مستمرة للتسريبات</h4><p>استخدام أدوات Threat Intelligence لرصد أي تسريبات جديدة لبيانات BSU</p></div>
+      </div>
+    </div>
+    <div>
+      <h3 class="sub-title" style="margin-bottom:12px;">برنامج التوعية الأمنية</h3>
+      <ul class="plain g">
+        <li>تدريب أمني إلزامي سنوي لجميع مستخدمي MIS</li>
+        <li>توعية بعدم مشاركة بيانات الاعتماد على أي قناة</li>
+        <li>إجراء موثق للإبلاغ عن الحوادث الأمنية</li>
+        <li>محاكاة هجمات Phishing دورية لقياس الوعي</li>
+        <li>سياسة مكتوبة لإدارة كلمات المرور والوصول</li>
+        <li>اختبار اختراق رسمي ربع سنوي</li>
+        <li>مراجعة دورية لصلاحيات الوصول</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ── ROADMAP ──────────────────────────────────── -->
+<section id="roadmap" class="sec fade-up">
+  <div class="sec-label amber">12 — خارطة طريق التصحيح</div>
+  <h2 class="sec-title">REMEDIATION ROADMAP</h2>
+
+  <div class="rm-list">
+    <div class="rm-row c">
+      <div class="rm-when"><div class="w">أسبوع 1</div><div class="p">CRITICAL</div></div>
+      <div class="rm-info">
+        <h4>الإجراءات الحرجة الفورية</h4>
+        <p>استبدال أسئلة الأمان بـ OTP · تطبيق Rate Limiting و CAPTCHA · إعادة تعيين قسرية لكل الحسابات المسربة · تسجيل محاولات Reset</p>
+      </div>
+    </div>
+    <div class="rm-row h">
+      <div class="rm-when"><div class="w">أسبوع 2-4</div><div class="p">HIGH</div></div>
+      <div class="rm-info">
+        <h4>الإصلاحات عالية الأولوية</h4>
+        <p>تطبيق MFA إلزامي للحسابات المميزة (Admin, Dean, HOD) · تطبيق سياسة كلمات المرور الجديدة · الإبلاغ عن القنوات المسربة لـ Telegram</p>
+      </div>
+    </div>
+    <div class="rm-row m">
+      <div class="rm-when"><div class="w">شهر 1-3</div><div class="p">MEDIUM</div></div>
+      <div class="rm-info">
+        <h4>الإجراءات متوسطة المدى</h4>
+        <p>توسيع MFA لجميع المستخدمين · نشر SIEM وكشف شذوذ تسجيل الدخول · تغيير نمط أسماء المستخدمين · إطلاق برنامج التوعية الأمنية</p>
+      </div>
+    </div>
+    <div class="rm-row l">
+      <div class="rm-when"><div class="w">مستمر</div><div class="p">ONGOING</div></div>
+      <div class="rm-info">
+        <h4>الإجراءات المستمرة</h4>
+        <p>اختبار اختراق ربع سنوي · مراقبة مستمرة لتسريب بيانات الاعتماد · تدريب أمني سنوي · مراجعة دورية للصلاحيات والسياسات</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card safe" style="margin-top:20px;display:flex;gap:20px;align-items:center;flex-wrap:wrap;">
+    <div style="text-align:center;min-width:80px;">
+      <div style="font-family:var(--mono);font-size:44px;font-weight:700;color:var(--green2);line-height:1;">1w</div>
+      <div style="font-size:9px;letter-spacing:2px;color:var(--text3);margin-top:4px;">للإصلاح الحرج</div>
+    </div>
+    <div style="flex:1;min-width:200px;">
+      <h4 style="font-size:13px;color:var(--green2);margin-bottom:6px;">الخلاصة — المشكلة قابلة للحل بسرعة</h4>
+      <p style="font-size:12.5px;color:var(--text2);line-height:1.7;">جميع الثغرات المكتشفة لها حلول واضحة ومجربة. الأثر الأكبر يأتي من VULN-002 ذات CVSS 9.1 — واستبدالها بـ OTP يمكن تنفيذه في أسبوع ويُزيل الاستغلال الرئيسي بالكامل.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── DISCLOSURE TIMELINE ─────────────────────── -->
+<section id="disclosure-timeline" class="sec fade-up">
+  <div class="sec-label blue">13 — جدول الإفصاح</div>
+  <h2 class="sec-title">DISCLOSURE TIMELINE</h2>
+
+  <div class="disc-tl">
+    <div class="disc-tl-item">
+      <div class="disc-dot done"></div>
+      <div class="disc-info">
+        <span class="date">April 2025 — Day 0</span>
+        <strong>الاكتشاف الأولي</strong>
+        <span>رصد بيانات الاعتماد المسربة على قنوات Telegram العامة</span>
+      </div>
+    </div>
+    <div class="disc-tl-item">
+      <div class="disc-dot done"></div>
+      <div class="disc-info">
+        <span class="date">April 2025 — Day 0</span>
+        <strong>إثبات المفهوم</strong>
+        <span>تطبيق PoC محكوم على حساب واحد بإذن المشرف لإثبات قابلية الاستغلال</span>
+      </div>
+    </div>
+    <div class="disc-tl-item">
+      <div class="disc-dot done"></div>
+      <div class="disc-info">
+        <span class="date">April 2025 — Day 0</span>
+        <strong>إخطار المشرف الأكاديمي</strong>
+        <span>إبلاغ فوري للدكتور المشرف بجميع التفاصيل في نفس يوم الاكتشاف</span>
+      </div>
+    </div>
+    <div class="disc-tl-item">
+      <div class="disc-dot done"></div>
+      <div class="disc-info">
+        <span class="date">April 2025 — Day 1-3</span>
+        <strong>إعداد التقرير التفصيلي</strong>
+        <span>توثيق شامل لجميع الثغرات والسيناريوهات والحلول في هذا التقرير</span>
+      </div>
+    </div>
+    <div class="disc-tl-item">
+      <div class="disc-dot pend"></div>
+      <div class="disc-info">
+        <span class="date">قيد الانتظار</span>
+        <strong>تسليم التقرير لإدارة الجامعة</strong>
+        <span>تقديم النتائج الرسمية لإدارة نظام المعلومات وقسم تقنية المعلومات</span>
+      </div>
+    </div>
+    <div class="disc-tl-item">
+      <div class="disc-dot pend"></div>
+      <div class="disc-info">
+        <span class="date">قيد الانتظار</span>
+        <strong>لا إفصاح عام قبل تطبيق الإصلاحات</strong>
+        <span>التزام كامل بمبادئ Responsible Disclosure — الإفصاح العام مشروط بإصلاح الثغرات</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── REFERENCES ───────────────────────────────── -->
+<section id="references" class="sec fade-up">
+  <div class="sec-label blue">14 — المراجع والمعايير</div>
+  <h2 class="sec-title">REFERENCES & STANDARDS</h2>
+
+  <div class="ref-list">
+    <div class="ref-item"><span class="ref-id">OWASP A07</span><span class="ref-name">OWASP Top 10:2021 — A07: Identification and Authentication Failures</span></div>
+    <div class="ref-item"><span class="ref-id">OWASP KBA</span><span class="ref-name">OWASP Authentication Cheat Sheet — Knowledge-Based Authentication (Deprecated)</span></div>
+    <div class="ref-item"><span class="ref-id">NIST 800-63B</span><span class="ref-name">NIST SP 800-63B — Digital Identity Guidelines: Authentication and Lifecycle Management</span></div>
+    <div class="ref-item"><span class="ref-id">CWE-200</span><span class="ref-name">CWE-200: Exposure of Sensitive Information to an Unauthorized Actor</span></div>
+    <div class="ref-item"><span class="ref-id">CWE-307</span><span class="ref-name">CWE-307: Improper Restriction of Excessive Authentication Attempts</span></div>
+    <div class="ref-item"><span class="ref-id">CWE-308</span><span class="ref-name">CWE-308: Use of Single-factor Authentication</span></div>
+    <div class="ref-item"><span class="ref-id">CWE-521</span><span class="ref-name">CWE-521: Weak Password Requirements</span></div>
+    <div class="ref-item"><span class="ref-id">CWE-640</span><span class="ref-name">CWE-640: Weak Password Recovery Mechanism for Forgotten Password</span></div>
+    <div class="ref-item"><span class="ref-id">CVSS v3.1</span><span class="ref-name">CVSS v3.1 Specification — Common Vulnerability Scoring System (NVD/NIST)</span></div>
+    <div class="ref-item"><span class="ref-id">ISO 27001</span><span class="ref-name">ISO/IEC 27001:2022 — Information Security Management Systems</span></div>
+  </div>
+
+  <div class="divider"></div>
+  <p style="font-size:12px;color:var(--text3);line-height:1.75;">
+    هذا التقرير موثق ومُعدّ وفق معايير الإفصاح الأمني المسؤول. جميع النتائج موثوقة ومُثبتة
+    بأدلة تقنية وتم الإفصاح عنها للجهات المختصة قبل أي نشر. البيانات المعروضة هي أنماط توضيحية
+    لا تُمثّل بيانات حقيقية نشطة لأي مستخدم.
+  </p>
+</section>
+
+</main><!-- /main -->
+
+<!-- ── FOOTER ──────────────────────────────────── -->
+<footer id="footer">
+  <span class="ft-id">BSU-SEC-2025-001 · mis.bsu.edu.eg · Beni Suef University</span>
+  <div class="ft-sep"></div>
+  <span class="ft-tag red">CONFIDENTIAL</span>
+  <span class="ft-tag g">RESPONSIBLE DISCLOSURE</span>
+  <span class="ft-tag g">AUTHORIZED ASSESSMENT</span>
+  <div style="margin-right:auto;font-family:var(--mono);font-size:9px;color:var(--text3);">
+    OWASP · NIST SP 800-63B · CVSS v3.1 · ISO/IEC 27001 · April 2025
+  </div>
+</footer>
+
+<script>
+// ── Progress bar
+const prog = document.getElementById('prog');
+const main = document.getElementById('main');
+window.addEventListener('scroll', () => {
+  const total = document.body.scrollHeight - window.innerHeight;
+  prog.style.width = (window.scrollY / total * 100) + '%';
+});
+
+// ── Sidebar scroll spy
+const allSecs = Array.from(document.querySelectorAll('#main section[id], #main .sec[id]'));
+const navLinks = document.querySelectorAll('.nav-a[data-sec]');
+
+window.addEventListener('scroll', () => {
+  let current = '';
+  allSecs.forEach(s => {
+    if (window.scrollY + 120 >= s.offsetTop) current = s.id;
+  });
+  navLinks.forEach(l => {
+    l.classList.toggle('on', l.dataset.sec === current);
+  });
+}, { passive: true });
+
+// ── Smooth scroll
+navLinks.forEach(l => {
+  l.addEventListener('click', () => {
+    const el = document.getElementById(l.dataset.sec);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+});
+
+// ── Vuln toggle
+function toggleVuln(header) {
+  const body = header.nextElementSibling;
+  const arrow = header.querySelector('.vuln-toggle');
+  const open = body.classList.toggle('open');
+  arrow.textContent = open ? '▲' : '▼';
+}
+
+// ── Copy code
+function copyCode(btn) {
+  const code = btn.closest('.code-wrap').querySelector('.code-body pre');
+  const text = code ? code.innerText : btn.closest('.code-wrap').querySelector('.code-body').innerText;
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = 'Copied!';
+    setTimeout(() => btn.textContent = 'Copy', 2000);
+  });
+}
+
+// ── Intersection observer fade-in
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
+}, { threshold: 0.08 });
+document.querySelectorAll('.fade-up').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>

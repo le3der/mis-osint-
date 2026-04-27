@@ -1,0 +1,163 @@
+            <div style="background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.2);border-radius:5px;padding:8px 12px;font-size:12.5px;">
+              <span style="color:#fca5a5;font-family:var(--mono);font-size:10px">Q3</span> — "ما اسم مسقط رأسك؟"
+              <span style="color:var(--text3);font-size:11px;display:block;margin-top:2px">→ معلومة عامة في كثير من الأحيان</span>
+            </div>
+            <div style="background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.2);border-radius:5px;padding:8px 12px;font-size:12.5px;">
+              <span style="color:#fca5a5;font-family:var(--mono);font-size:10px">Q4</span> — "ما اسم والدتك قبل الزواج؟"
+              <span style="color:var(--text3);font-size:11px;display:block;margin-top:2px">→ قابل للحصول من سجلات قسم الموارد البشرية</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="callout danger" style="margin-top:0;">
+            <span class="callout-icon">🚫</span>
+            <p><strong>موقف OWASP الرسمي:</strong> ترفض OWASP صراحةً KBA كآلية استرداد كلمة مرور. يُعدّ هذا النوع من الأسئلة مهجورًا أمنيًا منذ 2012. هذا النظام يستخدمها كطريقة <strong>الوحيدة</strong> للاسترداد.</p>
+          </div>
+          <div class="callout warn" style="margin-top:0;">
+            <span class="callout-icon">📊</span>
+            <p><strong>NIST SP 800-63B:</strong> يُصنّف NIST هذه الأسئلة ضمن أضعف مستويات التحقق ويوصي بالتخلص منها نهائيًا في أي نظام يحوي بيانات حساسة.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="code-wrap">
+        <div class="code-bar">
+          <div class="code-dots"><span class="d1"></span><span class="d2"></span><span class="d3"></span></div>
+          <span class="code-file">reset_flow_analysis.txt — تحليل منطق إعادة التعيين</span>
+          <button class="code-copy" onclick="copyCode(this)">Copy</button>
+        </div>
+        <div class="code-body"><pre><span class="t-c">══ تدفق Password Reset الحالي (الثغرة) ══</span>
+
+<span class="t-k">STEP 1</span>: GET /password-reset
+         <span class="t-w">النظام: أدخل اسم المستخدم</span>
+
+<span class="t-k">STEP 2</span>: POST username=<span class="t-n">hod_scifac_002</span>
+         <span class="t-w">النظام: اسم المستخدم صالح ✓</span>
+         <span class="t-w">النظام: يعرض سؤال الأمان → "ما اسمك الكامل؟"</span>
+
+<span class="t-k">STEP 3</span>: POST security_answer=<span class="t-s">"[مأخوذ من دليل الجامعة]"</span>
+         <span class="t-w">النظام: الإجابة صحيحة ✓</span>
+         <span class="t-r">⚠ لا تحقق إضافي · لا OTP · لا MFA · لا إشعار للمالك الأصلي</span>
+         <span class="t-w">النظام: أدخل كلمة المرور الجديدة</span>
+
+<span class="t-k">STEP 4</span>: POST new_password=<span class="t-s">"AttackerChosenPassword#1"</span>
+         <span class="t-g">النظام: ✓ تم تغيير كلمة المرور بنجاح</span>
+
+<span class="t-c">══ النتيجة: حساب مخترق بالكامل في 3 خطوات بسيطة ══</span></pre></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- V3 -->
+  <div id="vuln3-anchor" class="vuln-entry">
+    <div class="vuln-header" onclick="toggleVuln(this)">
+      <span class="vuln-num">VULN-003</span>
+      <span class="vuln-name">غياب كامل لـ Rate Limiting و Account Lockout على Password Reset</span>
+      <span class="badge h">HIGH</span>
+      <span class="badge cvss">CVSS 8.0</span>
+      <span class="badge cwe">CWE-307</span>
+      <span class="vuln-toggle">▼</span>
+    </div>
+    <div class="vuln-body">
+      <p style="font-size:13px;color:var(--text2);line-height:1.75;margin-bottom:16px;">
+        لا يوجد أي حد على عدد محاولات Password Reset. لا Rate Limiting، لا CAPTCHA،
+        ولا قفل للحساب بعد محاولات فاشلة متعددة. هذا يُمكّن أي مهاجم من تنفيذ هجوم
+        Brute-force آلي على أسئلة الأمان دون أي تأخير أو إنذار.
+      </p>
+      <div class="g2">
+        <div class="code-wrap">
+          <div class="code-bar">
+            <div class="code-dots"><span class="d1"></span><span class="d2"></span><span class="d3"></span></div>
+            <span class="code-file">no_ratelimit_impact.txt</span>
+          </div>
+          <div class="code-body"><pre><span class="t-c"># غياب Rate Limiting يعني:</span>
+
+<span class="t-r">محاولة 01:</span> <span class="t-a">1990-01-01</span> → <span class="t-r">خطأ</span>
+<span class="t-r">محاولة 02:</span> <span class="t-a">1991-03-15</span> → <span class="t-r">خطأ</span>
+<span class="t-r">محاولة 03:</span> <span class="t-a">1985-07-22</span> → <span class="t-r">خطأ</span>
+<span class="t-p">  ⚡ لا تأخير · لا قفل · لا إشعار</span>
+<span class="t-r">محاولة .N:</span> <span class="t-a">[الإجابة الصحيحة]</span> → <span class="t-g">✓ نجاح!</span>
+
+<span class="t-c"># لتاريخ ميلاد: ~36500 تاريخ ممكن (100 عام)
+# بدون Rate Limit: يمكن تجربتها في دقائق
+# مع Rate Limit (5/ساعة): يلزم 300 يوم → غير عملي</span></pre></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <div class="card danger">
+            <h4 style="font-size:12.5px;color:#fca5a5;margin-bottom:5px;">⚡ يُمكّن الهجوم الآلي</h4>
+            <p style="font-size:12px;">سكريبت بسيط يجرب آلاف الاحتمالات في ثوانٍ</p>
+          </div>
+          <div class="card danger">
+            <h4 style="font-size:12.5px;color:#fca5a5;margin-bottom:5px;">👻 لا رصد ولا إنذار</h4>
+            <p style="font-size:12px;">المستخدم الحقيقي لا يعلم بالمحاولات المتعددة</p>
+          </div>
+          <div class="card danger">
+            <h4 style="font-size:12.5px;color:#fca5a5;margin-bottom:5px;">📉 يخفض العتبة الفنية</h4>
+            <p style="font-size:12px;">الهجوم ممكن لأي شخص بدون خبرة برمجية</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- V4 -->
+  <div id="vuln4-anchor" class="vuln-entry">
+    <div class="vuln-header" onclick="toggleVuln(this)">
+      <span class="vuln-num">VULN-004</span>
+      <span class="vuln-name">غياب المصادقة متعددة العوامل (MFA) لجميع الأدوار</span>
+      <span class="badge h">HIGH</span>
+      <span class="badge cvss">CVSS 7.8</span>
+      <span class="badge cwe">CWE-308</span>
+      <span class="vuln-toggle">▼</span>
+    </div>
+    <div class="vuln-body">
+      <p style="font-size:13px;color:var(--text2);line-height:1.75;margin-bottom:16px;">
+        النظام يعتمد حصريًا على Single-Factor Authentication. لا يوجد عامل ثانٍ
+        للتحقق لأي دور — حتى للمسؤولين وعمداء الكليات الذين لديهم وصول شامل لبيانات آلاف الطلاب.
+        هذا يعني أن أي اختراق لكلمة المرور — سواء عبر تسريب أو هجوم Reset — يؤدي فورًا إلى سيطرة كاملة.
+      </p>
+      <div class="callout warn">
+        <span class="callout-icon">📊</span>
+        <p><strong>إحصاء Microsoft Security 2024:</strong> تقلل MFA من خطر اختراق الحسابات بنسبة تتجاوز <strong>99.9%</strong>. وجودها وحدها كان سيُبطل سيناريو الهجوم الكامل حتى لو نجحت جميع الثغرات الأخرى.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- V5 -->
+  <div id="vuln5-anchor" class="vuln-entry">
+    <div class="vuln-header" onclick="toggleVuln(this)">
+      <span class="vuln-num">VULN-005</span>
+      <span class="vuln-name">سياسة كلمات مرور ضعيفة — غياب متطلبات التعقيد</span>
+      <span class="badge m">MEDIUM</span>
+      <span class="badge cvss">CVSS 6.5</span>
+      <span class="badge cwe">CWE-521</span>
+      <span class="vuln-toggle">▼</span>
+    </div>
+    <div class="vuln-body">
+      <p style="font-size:13px;color:var(--text2);line-height:1.75;margin-bottom:16px;">
+        النظام لا يُطبّق متطلبات تعقيد إلزامية. بعد اختراق حساب عبر VULN-002، يمكن للمهاجم
+        اختيار كلمة مرور بالغة البساطة مثل <code style="font-family:var(--mono);color:var(--red3);font-size:11px">123456</code> أو <code style="font-family:var(--mono);color:var(--red3);font-size:11px">admin</code> مما يجعل الحساب عرضة لمزيد من الاختراقات.
+      </p>
+      <div class="g2">
+        <div>
+          <h4 style="font-size:13px;color:var(--red3);margin-bottom:10px;">ما يُسمح به حاليًا ❌</h4>
+          <ul class="plain r">
+            <li>كلمات مرور قصيرة (أقل من 8 أحرف)</li>
+            <li>كلمات بسيطة كـ 123456 و password</li>
+            <li>إعادة استخدام نفس كلمة المرور</li>
+            <li>لا انتهاء صلاحية إجبارية</li>
+          </ul>
+        </div>
+        <div>
+          <h4 style="font-size:13px;color:var(--green2);margin-bottom:10px;">المعيار المطلوب ✅</h4>
+          <ul class="plain g">
+            <li>حد أدنى 12 حرفًا (NIST 2024)</li>
+            <li>مزيج من كبيرة وصغيرة وأرقام ورموز</li>
+            <li>فحص مقابل قواعد كلمات المرور المخترقة</li>
+            <li>تدوير إجباري كل 90 يومًا للمميزة</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
