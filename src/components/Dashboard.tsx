@@ -24,6 +24,9 @@ export function Dashboard({ setView }: { setView: (v: 'landing' | 'report' | 'si
       getTopScores().then(data => {
          setLeaderboardData(data);
          setLoadingScores(false);
+      }).catch(e => {
+         console.warn("Failed to load scores", e);
+         setLoadingScores(false);
       });
     }
   }, [activeTab]);
@@ -62,15 +65,11 @@ export function Dashboard({ setView }: { setView: (v: 'landing' | 'report' | 'si
       
       {/* Immersive Animated Background */}
       <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle at center, #ffffff 2px, transparent 2px)', backgroundSize: '32px 32px' }}></div>
-      <motion.div 
-        animate={{ scale: [1, 1.1, 1], opacity: [0.15, 0.25, 0.15] }} 
-        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-        className={cn("absolute top-[-20%] w-[800px] h-[800px] bg-indigo-600/20 rounded-full blur-[120px] pointer-events-none", isRtl ? "left-[-10%]" : "right-[-10%]")}
+      <div 
+        className={cn("absolute top-[-20%] w-[800px] h-[800px] bg-indigo-600/10 rounded-full blur-[100px] pointer-events-none", isRtl ? "left-[-10%]" : "right-[-10%]")}
       />
-      <motion.div 
-        animate={{ scale: [1, 1.2, 1], opacity: [0.1, 0.15, 0.1] }} 
-        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-        className={cn("absolute bottom-[-20%] w-[600px] h-[600px] bg-emerald-600/20 rounded-full blur-[120px] pointer-events-none", isRtl ? "right-[-10%]" : "left-[-10%]")}
+      <div 
+        className={cn("absolute bottom-[-20%] w-[600px] h-[600px] bg-emerald-600/10 rounded-full blur-[100px] pointer-events-none", isRtl ? "right-[-10%]" : "left-[-10%]")}
       />
 
       <div className="max-w-[90rem] mx-auto z-10 relative space-y-8 flex flex-col h-full min-h-[calc(100vh-80px)]">
