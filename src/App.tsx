@@ -6,6 +6,7 @@ import { LanguageProvider, useLanguage } from './lib/LanguageContext';
 import { GameProvider } from './lib/GameContext';
 import { Volume2, VolumeX, Globe } from 'lucide-react';
 import { cn } from './lib/utils';
+import { Analytics } from '@vercel/analytics/react';
 
 function FloatingControls() {
   const { lang, setLang, audioMuted, toggleAudio, isRtl } = useLanguage();
@@ -48,6 +49,7 @@ export default function App() {
     <LanguageProvider>
       <GameProvider>
         <MainApp />
+        <Analytics />
       </GameProvider>
     </LanguageProvider>
   );
